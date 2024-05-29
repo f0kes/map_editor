@@ -1,2 +1,2 @@
-python main.py
+python "%CD%"\main.py
 pause
