@@ -1,5 +1,7 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, filedialog
+
+from PIL import Image
 
 import app_setting
 from file_selector import FileSelector
@@ -26,10 +28,13 @@ class WorkPanel:
         self.files_frame.grid(row=3, column=0, sticky='s')
 
         self.delete_button = ttk.Button(self.box_buttons_frame, text='Delete', command=app_settings.delete_current_box)
-        self.delete_button.grid(row=0, column=1, sticky='s')
+        self.delete_button.grid(row=0, column=2, sticky='s')
         self.export_original_button = ttk.Button(self.box_buttons_frame, text='Export Original',
                                                  command=app_settings.export_original)
         self.export_original_button.grid(row=0, column=0, sticky='s')
+        self.choose_replacement_button = ttk.Button(self.box_buttons_frame, text='Choose Replacement',
+                                                    command=self.replace_callback)
+        self.choose_replacement_button.grid(row=0, column=1, sticky='s')
 
         self.popup_button = ttk.Button(self.files_frame, text='File Select', command=self.file_selector_open)
         self.popup_button.grid(row=0, column=0, sticky='s', padx=10, pady=10)
@@ -87,3 +92,14 @@ class WorkPanel:
 
     def save_callback(self):
         self.app_settings.save_image()
+
+    def replace_callback(self):
+        filetypes = (
+            ('png', '*.png'),
+        )
+        path = filedialog.askopenfilename(
+            title='Choose replacement image',
+            filetypes=filetypes
+        )
+        image = Image.open(path)
+        self.app_settings.selected_box.set_replacement_image(image)
